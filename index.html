@@ -1,0 +1,1280 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MyFiles</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+    background:#f4f6f8;
+    color:#222;
+    min-height:100vh;
+    transition:.2s;
+}
+
+body.dark{
+    background:#15171a;
+    color:#eee;
+}
+
+.sidebar{
+    position:fixed;
+    left:0;
+    top:0;
+    width:245px;
+    height:100vh;
+    background:white;
+    border-right:1px solid #ddd;
+    padding:20px;
+    z-index:20;
+}
+
+.dark .sidebar{
+    background:#1e2125;
+    border-color:#333;
+}
+
+.logo{
+    font-size:25px;
+    font-weight:bold;
+    margin-bottom:30px;
+}
+
+.nav{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+
+.nav button{
+    border:none;
+    background:transparent;
+    color:inherit;
+    text-align:left;
+    padding:12px;
+    border-radius:10px;
+    cursor:pointer;
+    font-size:15px;
+}
+
+.nav button:hover,
+.nav button.active{
+    background:#e9edf2;
+}
+
+.dark .nav button:hover,
+.dark .nav button.active{
+    background:#30343a;
+}
+
+.sidebar-bottom{
+    position:absolute;
+    bottom:20px;
+    left:20px;
+    right:20px;
+}
+
+.main{
+    margin-left:245px;
+    padding:30px;
+}
+
+.topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+}
+
+.menu-btn{
+    display:none;
+    border:none;
+    background:#222;
+    color:white;
+    padding:10px 13px;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.dark .menu-btn{
+    background:#444;
+}
+
+.user-area{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.avatar{
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    background:#4d7cff;
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:bold;
+}
+
+.hero{
+    background:linear-gradient(135deg,#4d7cff,#7257e8);
+    color:white;
+    border-radius:18px;
+    padding:35px;
+    margin-bottom:25px;
+}
+
+.hero h1{
+    font-size:32px;
+    margin-bottom:8px;
+}
+
+.hero p{
+    opacity:.9;
+}
+
+.toolbar{
+    display:flex;
+    gap:10px;
+    margin-bottom:20px;
+    flex-wrap:wrap;
+}
+
+.search{
+    flex:1;
+    min-width:200px;
+    padding:13px 15px;
+    border:1px solid #ccc;
+    border-radius:10px;
+    font-size:15px;
+    background:white;
+    color:#222;
+}
+
+.dark .search{
+    background:#1e2125;
+    color:white;
+    border-color:#444;
+}
+
+.primary{
+    border:none;
+    background:#4d7cff;
+    color:white;
+    padding:12px 18px;
+    border-radius:10px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.primary:hover{
+    opacity:.9;
+}
+
+.secondary{
+    border:none;
+    background:#e9edf2;
+    color:#222;
+    padding:12px 18px;
+    border-radius:10px;
+    cursor:pointer;
+}
+
+.dark .secondary{
+    background:#30343a;
+    color:white;
+}
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+    margin-bottom:25px;
+}
+
+.stat{
+    background:white;
+    border:1px solid #ddd;
+    border-radius:14px;
+    padding:20px;
+}
+
+.dark .stat{
+    background:#1e2125;
+    border-color:#333;
+}
+
+.stat-number{
+    font-size:28px;
+    font-weight:bold;
+    margin-bottom:5px;
+}
+
+.files{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(230px,1fr));
+    gap:15px;
+}
+
+.file-card{
+    background:white;
+    border:1px solid #ddd;
+    border-radius:14px;
+    padding:18px;
+    transition:.2s;
+}
+
+.dark .file-card{
+    background:#1e2125;
+    border-color:#333;
+}
+
+.file-card:hover{
+    transform:translateY(-2px);
+}
+
+.file-icon{
+    font-size:40px;
+    margin-bottom:12px;
+}
+
+.file-name{
+    font-weight:bold;
+    word-break:break-word;
+    margin-bottom:6px;
+}
+
+.file-info{
+    color:#777;
+    font-size:13px;
+    margin-bottom:15px;
+}
+
+.dark .file-info{
+    color:#aaa;
+}
+
+.file-actions{
+    display:flex;
+    gap:7px;
+}
+
+.file-actions button{
+    border:none;
+    padding:8px 11px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:13px;
+}
+
+.download{
+    background:#4d7cff;
+    color:white;
+}
+
+.delete{
+    background:#eee;
+    color:#c33;
+}
+
+.dark .delete{
+    background:#30343a;
+}
+
+.empty{
+    background:white;
+    border:1px dashed #bbb;
+    border-radius:15px;
+    padding:50px 20px;
+    text-align:center;
+    color:#777;
+}
+
+.dark .empty{
+    background:#1e2125;
+    border-color:#555;
+    color:#aaa;
+}
+
+.empty-icon{
+    font-size:50px;
+    margin-bottom:12px;
+}
+
+.section{
+    display:none;
+}
+
+.section.active{
+    display:block;
+}
+
+.setting{
+    background:white;
+    border:1px solid #ddd;
+    padding:18px;
+    border-radius:12px;
+    margin-bottom:12px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.dark .setting{
+    background:#1e2125;
+    border-color:#333;
+}
+
+.setting button{
+    border:none;
+    background:#4d7cff;
+    color:white;
+    padding:9px 14px;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.toast{
+    position:fixed;
+    right:20px;
+    bottom:20px;
+    background:#222;
+    color:white;
+    padding:13px 18px;
+    border-radius:10px;
+    opacity:0;
+    pointer-events:none;
+    transform:translateY(10px);
+    transition:.2s;
+    z-index:100;
+}
+
+.toast.show{
+    opacity:1;
+    transform:translateY(0);
+}
+
+.hidden{
+    display:none;
+}
+
+@media(max-width:700px){
+
+    .sidebar{
+        transform:translateX(-100%);
+        transition:.2s;
+    }
+
+    .sidebar.open{
+        transform:translateX(0);
+    }
+
+    .main{
+        margin-left:0;
+        padding:20px;
+    }
+
+    .menu-btn{
+        display:block;
+    }
+
+    .stats{
+        grid-template-columns:1fr;
+    }
+
+    .hero{
+        padding:25px;
+    }
+
+    .hero h1{
+        font-size:27px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<aside class="sidebar" id="sidebar">
+
+    <div class="logo">📁 MyFiles</div>
+
+    <div class="nav">
+        <button class="active" onclick="showSection('home',this)">
+            🏠 Home
+        </button>
+
+        <button onclick="showSection('files',this)">
+            📄 My Files
+        </button>
+
+        <button onclick="showSection('settings',this)">
+            ⚙️ Settings
+        </button>
+    </div>
+
+    <div class="sidebar-bottom">
+        <button class="nav button" onclick="goToMyWorld()">
+            🌎 MyWorld
+        </button>
+    </div>
+
+</aside>
+
+<main class="main">
+
+    <div class="topbar">
+
+        <button class="menu-btn" onclick="toggleSidebar()">
+            ☰
+        </button>
+
+        <div></div>
+
+        <div class="user-area">
+            <span>MyFiles</span>
+            <div class="avatar">📁</div>
+        </div>
+
+    </div>
+
+
+    <!-- HOME -->
+
+    <section class="section active" id="home">
+
+        <div class="hero">
+            <h1>📁 MyFiles</h1>
+            <p>Your personal file storage, right in your browser.</p>
+        </div>
+
+        <div class="stats">
+
+            <div class="stat">
+                <div class="stat-number" id="fileCount">0</div>
+                <div>Files</div>
+            </div>
+
+            <div class="stat">
+                <div class="stat-number" id="totalSize">0 B</div>
+                <div>Total Size</div>
+            </div>
+
+            <div class="stat">
+                <div class="stat-number" id="fileTypes">0</div>
+                <div>File Types</div>
+            </div>
+
+        </div>
+
+        <div class="toolbar">
+
+            <input
+                class="search"
+                id="searchHome"
+                placeholder="Search your files..."
+                oninput="renderFiles()"
+            >
+
+            <button class="primary" onclick="chooseFiles()">
+                ⬆️ Upload Files
+            </button>
+
+        </div>
+
+        <div id="homeFiles"></div>
+
+    </section>
+
+
+    <!-- FILES -->
+
+    <section class="section" id="files">
+
+        <div class="hero">
+            <h1>📄 My Files</h1>
+            <p>Upload, download, search and manage your files.</p>
+        </div>
+
+        <div class="toolbar">
+
+            <input
+                class="search"
+                id="searchFiles"
+                placeholder="Search files..."
+                oninput="renderFiles()"
+            >
+
+            <button class="primary" onclick="chooseFiles()">
+                ⬆️ Upload Files
+            </button>
+
+        </div>
+
+        <div id="fileList"></div>
+
+    </section>
+
+
+    <!-- SETTINGS -->
+
+    <section class="section" id="settings">
+
+        <div class="hero">
+            <h1>⚙️ Settings</h1>
+            <p>Customize MyFiles.</p>
+        </div>
+
+        <div class="setting">
+
+            <div>
+                <strong>Dark Mode</strong>
+                <p style="margin-top:4px;color:#777;">
+                    Change the appearance of MyFiles.
+                </p>
+            </div>
+
+            <button onclick="toggleDarkMode()">
+                Toggle
+            </button>
+
+        </div>
+
+        <div class="setting">
+
+            <div>
+                <strong>Clear All Files</strong>
+                <p style="margin-top:4px;color:#777;">
+                    Permanently remove every stored file.
+                </p>
+            </div>
+
+            <button onclick="clearAllFiles()">
+                Clear
+            </button>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<input
+    type="file"
+    id="fileInput"
+    multiple
+    class="hidden"
+    onchange="handleFiles(event)"
+>
+
+<div class="toast" id="toast"></div>
+
+
+<script>
+
+/*
+    MyFiles 1.0
+
+    Files are stored locally using IndexedDB.
+    This means the files stay in this browser
+    even after refreshing the page.
+*/
+
+const DB_NAME = "MyFilesDB";
+const STORE_NAME = "files";
+
+let db;
+
+
+/* =========================
+   DATABASE
+========================= */
+
+function openDatabase(){
+
+    return new Promise((resolve,reject)=>{
+
+        const request =
+            indexedDB.open(DB_NAME,1);
+
+        request.onupgradeneeded = function(event){
+
+            const database = event.target.result;
+
+            if(!database.objectStoreNames.contains(STORE_NAME)){
+
+                database.createObjectStore(
+                    STORE_NAME,
+                    {keyPath:"id",autoIncrement:true}
+                );
+
+            }
+
+        };
+
+        request.onsuccess = function(event){
+
+            db = event.target.result;
+
+            resolve(db);
+
+        };
+
+        request.onerror = function(){
+
+            reject(request.error);
+
+        };
+
+    });
+
+}
+
+
+/* =========================
+   ADD FILE
+========================= */
+
+function addFile(file){
+
+    return new Promise((resolve,reject)=>{
+
+        const transaction =
+            db.transaction(STORE_NAME,"readwrite");
+
+        const store =
+            transaction.objectStore(STORE_NAME);
+
+        const data = {
+
+            name:file.name,
+
+            type:file.type || "application/octet-stream",
+
+            size:file.size,
+
+            date:Date.now(),
+
+            blob:file
+
+        };
+
+        const request =
+            store.add(data);
+
+        request.onsuccess = ()=>resolve();
+
+        request.onerror = ()=>reject(request.error);
+
+    });
+
+}
+
+
+/* =========================
+   GET FILES
+========================= */
+
+function getFiles(){
+
+    return new Promise((resolve,reject)=>{
+
+        const transaction =
+            db.transaction(STORE_NAME,"readonly");
+
+        const store =
+            transaction.objectStore(STORE_NAME);
+
+        const request =
+            store.getAll();
+
+        request.onsuccess = ()=>{
+
+            resolve(request.result.reverse());
+
+        };
+
+        request.onerror = ()=>reject(request.error);
+
+    });
+
+}
+
+
+/* =========================
+   DELETE FILE
+========================= */
+
+function deleteFile(id){
+
+    return new Promise((resolve,reject)=>{
+
+        const transaction =
+            db.transaction(STORE_NAME,"readwrite");
+
+        const store =
+            transaction.objectStore(STORE_NAME);
+
+        const request =
+            store.delete(id);
+
+        request.onsuccess = ()=>resolve();
+
+        request.onerror = ()=>reject(request.error);
+
+    });
+
+}
+
+
+/* =========================
+   UPLOAD
+========================= */
+
+function chooseFiles(){
+
+    document.getElementById("fileInput").click();
+
+}
+
+
+async function handleFiles(event){
+
+    const files =
+        Array.from(event.target.files);
+
+    if(!files.length){
+        return;
+    }
+
+    for(const file of files){
+
+        await addFile(file);
+
+    }
+
+    event.target.value="";
+
+    showToast(
+        files.length === 1
+        ? "File uploaded!"
+        : files.length+" files uploaded!"
+    );
+
+    renderFiles();
+
+}
+
+
+/* =========================
+   RENDER
+========================= */
+
+async function renderFiles(){
+
+    const files =
+        await getFiles();
+
+    const homeSearch =
+        document.getElementById("searchHome").value
+        .toLowerCase();
+
+    const fileSearch =
+        document.getElementById("searchFiles").value
+        .toLowerCase();
+
+    const search =
+        homeSearch || fileSearch;
+
+    const filtered =
+        files.filter(file =>
+            file.name.toLowerCase().includes(search)
+        );
+
+    updateStats(files);
+
+    renderFileContainer(
+        document.getElementById("homeFiles"),
+        filtered.slice(0,8)
+    );
+
+    renderFileContainer(
+        document.getElementById("fileList"),
+        filtered
+    );
+
+}
+
+
+/* =========================
+   FILE CARDS
+========================= */
+
+function renderFileContainer(container,files){
+
+    if(!files.length){
+
+        container.innerHTML = `
+            <div class="empty">
+                <div class="empty-icon">📂</div>
+                <h3>No files found</h3>
+                <p style="margin-top:7px;">
+                    Upload a file to get started.
+                </p>
+            </div>
+        `;
+
+        return;
+
+    }
+
+    const grid =
+        document.createElement("div");
+
+    grid.className="files";
+
+    files.forEach(file=>{
+
+        const card =
+            document.createElement("div");
+
+        card.className="file-card";
+
+        const icon =
+            getFileIcon(file.name,file.type);
+
+        card.innerHTML = `
+
+            <div class="file-icon">${icon}</div>
+
+            <div class="file-name"></div>
+
+            <div class="file-info">
+                ${formatSize(file.size)}
+                •
+                ${formatDate(file.date)}
+            </div>
+
+            <div class="file-actions">
+
+                <button class="download">
+                    ⬇️ Download
+                </button>
+
+                <button class="delete">
+                    🗑️ Delete
+                </button>
+
+            </div>
+        `;
+
+        card.querySelector(".file-name")
+            .textContent=file.name;
+
+        card.querySelector(".download")
+            .onclick=()=>downloadFile(file);
+
+        card.querySelector(".delete")
+            .onclick=()=>removeFile(file);
+
+        grid.appendChild(card);
+
+    });
+
+    container.innerHTML="";
+    container.appendChild(grid);
+
+}
+
+
+/* =========================
+   DOWNLOAD
+========================= */
+
+function downloadFile(file){
+
+    const url =
+        URL.createObjectURL(file.blob);
+
+    const link =
+        document.createElement("a");
+
+    link.href=url;
+    link.download=file.name;
+
+    document.body.appendChild(link);
+
+    link.click();
+
+    link.remove();
+
+    setTimeout(()=>{
+        URL.revokeObjectURL(url);
+    },1000);
+
+    showToast("Download started!");
+}
+
+
+/* =========================
+   DELETE
+========================= */
+
+async function removeFile(file){
+
+    const confirmed =
+        confirm(
+            'Delete "'+
+            file.name+
+            '"?'
+        );
+
+    if(!confirmed){
+        return;
+    }
+
+    await deleteFile(file.id);
+
+    showToast("File deleted.");
+
+    renderFiles();
+
+}
+
+
+/* =========================
+   STATS
+========================= */
+
+function updateStats(files){
+
+    const total =
+        files.reduce(
+            (sum,file)=>sum+file.size,
+            0
+        );
+
+    const types =
+        new Set(
+            files.map(file=>file.type)
+        );
+
+    document.getElementById("fileCount")
+        .textContent=files.length;
+
+    document.getElementById("totalSize")
+        .textContent=formatSize(total);
+
+    document.getElementById("fileTypes")
+        .textContent=types.size;
+
+}
+
+
+/* =========================
+   FILE ICON
+========================= */
+
+function getFileIcon(name,type){
+
+    const extension =
+        name.split(".").pop().toLowerCase();
+
+    if(type.startsWith("image/")){
+        return "🖼️";
+    }
+
+    if(type.startsWith("video/")){
+        return "🎬";
+    }
+
+    if(type.startsWith("audio/")){
+        return "🎵";
+    }
+
+    if(
+        extension==="html" ||
+        extension==="htm"
+    ){
+        return "🌐";
+    }
+
+    if(
+        extension==="js" ||
+        extension==="css" ||
+        extension==="json"
+    ){
+        return "💻";
+    }
+
+    if(
+        extension==="zip" ||
+        extension==="rar" ||
+        extension==="7z"
+    ){
+        return "📦";
+    }
+
+    if(
+        extension==="pdf"
+    ){
+        return "📕";
+    }
+
+    if(
+        extension==="doc" ||
+        extension==="docx" ||
+        extension==="txt"
+    ){
+        return "📄";
+    }
+
+    return "📁";
+
+}
+
+
+/* =========================
+   FORMAT SIZE
+========================= */
+
+function formatSize(bytes){
+
+    if(bytes===0){
+        return "0 B";
+    }
+
+    const units=[
+        "B",
+        "KB",
+        "MB",
+        "GB",
+        "TB"
+    ];
+
+    const i =
+        Math.floor(
+            Math.log(bytes)/Math.log(1024)
+        );
+
+    return (
+        bytes /
+        Math.pow(1024,i)
+    ).toFixed(i===0 ? 0 : 1)
+    +" "+
+    units[i];
+
+}
+
+
+/* =========================
+   FORMAT DATE
+========================= */
+
+function formatDate(timestamp){
+
+    return new Date(timestamp)
+        .toLocaleDateString();
+
+}
+
+
+/* =========================
+   NAVIGATION
+========================= */
+
+function showSection(section,button){
+
+    document.querySelectorAll(".section")
+        .forEach(item=>{
+            item.classList.remove("active");
+        });
+
+    document.getElementById(section)
+        .classList.add("active");
+
+    document.querySelectorAll(".nav button")
+        .forEach(item=>{
+            item.classList.remove("active");
+        });
+
+    if(button){
+        button.classList.add("active");
+    }
+
+    if(window.innerWidth<=700){
+
+        document.getElementById("sidebar")
+            .classList.remove("open");
+
+    }
+
+    renderFiles();
+
+}
+
+
+/* =========================
+   SIDEBAR
+========================= */
+
+function toggleSidebar(){
+
+    document.getElementById("sidebar")
+        .classList.toggle("open");
+
+}
+
+
+/* =========================
+   DARK MODE
+========================= */
+
+function toggleDarkMode(){
+
+    document.body.classList.toggle("dark");
+
+    localStorage.setItem(
+        "myfilesDarkMode",
+        document.body.classList.contains("dark")
+    );
+
+}
+
+
+if(
+    localStorage.getItem("myfilesDarkMode")
+    ===
+    "true"
+){
+
+    document.body.classList.add("dark");
+
+}
+
+
+/* =========================
+   CLEAR ALL
+========================= */
+
+async function clearAllFiles(){
+
+    const files =
+        await getFiles();
+
+    if(!files.length){
+
+        showToast("There are no files to delete.");
+
+        return;
+
+    }
+
+    const confirmed =
+        confirm(
+            "Delete ALL "+files.length+
+            " files? This cannot be undone."
+        );
+
+    if(!confirmed){
+        return;
+    }
+
+    const transaction =
+        db.transaction(STORE_NAME,"readwrite");
+
+    const store =
+        transaction.objectStore(STORE_NAME);
+
+    store.clear();
+
+    transaction.oncomplete=()=>{
+
+        showToast("All files deleted.");
+
+        renderFiles();
+
+    };
+
+}
+
+
+/* =========================
+   TOAST
+========================= */
+
+function showToast(message){
+
+    const toast =
+        document.getElementById("toast");
+
+    toast.textContent=message;
+
+    toast.classList.add("show");
+
+    setTimeout(()=>{
+
+        toast.classList.remove("show");
+
+    },2500);
+
+}
+
+
+/* =========================
+   MYWORLD
+========================= */
+
+function goToMyWorld(){
+
+    window.location.href =
+        "https://lazerman202.github.io/MyWorld/";
+
+}
+
+
+/* =========================
+   START
+========================= */
+
+async function start(){
+
+    try{
+
+        await openDatabase();
+
+        await renderFiles();
+
+    }
+    catch(error){
+
+        console.error(error);
+
+        alert(
+            "MyFiles could not start. "+
+            "Your browser may not support IndexedDB."
+        );
+
+    }
+
+}
+
+start();
+
+</script>
+
+</body>
+</html>
+```
